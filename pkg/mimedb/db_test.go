@@ -1,5 +1,5 @@
 /*
- * mime-db: Mime Database, (C) 2015 Minio, Inc.
+ * mime-db: Mime Database, (C) 2015, 2016, 2017 MinIO, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,24 +14,31 @@
  * limitations under the License.
  */
 
-package mimedb_test
+package mimedb
 
-import (
-	"testing"
+import "testing"
 
-	"github.com/minio/minio/pkg/mimedb"
+func TestMimeLookup(t *testing.T) {
+	// Test mimeLookup.
+	contentType := DB["txt"].ContentType
+	if contentType != "text/plain" {
+		t.Fatalf("Invalid content type are found expected \"application/x-msdownload\", got %s", contentType)
+	}
+	compressible := DB["txt"].Compressible
+	if compressible {
+		t.Fatalf("Invalid content type are found expected \"false\", got %t", compressible)
+	}
+}
 
-	. "gopkg.in/check.v1"
-)
-
-func Test(t *testing.T) { TestingT(t) }
-
-type MySuite struct{}
-
-var _ = Suite(&MySuite{})
-
-func (s *MySuite) TestLookup(c *C) {
-	// Test MustLookup.
-	contentType := mimedb.DB["exe"].ContentType
-	c.Assert(contentType, Not(Equals), "")
+func TestTypeByExtension(t *testing.T) {
+	// Test TypeByExtension.
+	contentType := TypeByExtension(".txt")
+	if contentType != "text/plain" {
+		t.Fatalf("Invalid content type are found expected \"text/plain\", got %s", contentType)
+	}
+	// Test non-existent type resolution
+	contentType = TypeByExtension(".abc")
+	if contentType != "application/octet-stream" {
+		t.Fatalf("Invalid content type are found expected \"application/octet-stream\", got %s", contentType)
+	}
 }

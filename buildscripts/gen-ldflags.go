@@ -1,7 +1,7 @@
 // +build ignore
 
 /*
- * Minio Cloud Storage, (C) 2015 Minio, Inc.
+ * MinIO Cloud Storage, (C) 2015 MinIO, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -27,12 +27,13 @@ import (
 )
 
 func genLDFlags(version string) string {
-	var ldflagsStr string
-	ldflagsStr = "-X main.minioVersion=" + version
-	ldflagsStr += " -X main.minioReleaseTag=" + releaseTag(version)
-	ldflagsStr += " -X main.minioCommitID=" + commitID()
-	ldflagsStr += " -X main.minioShortCommitID=" + commitID()[:12]
-	ldflagsStr += " -X main.minioGOPATH=" + os.Getenv("GOPATH")
+	ldflagsStr := "-s -w"
+	ldflagsStr += " -X github.com/minio/minio/cmd.Version=" + version
+	ldflagsStr += " -X github.com/minio/minio/cmd.ReleaseTag=" + releaseTag(version)
+	ldflagsStr += " -X github.com/minio/minio/cmd.CommitID=" + commitID()
+	ldflagsStr += " -X github.com/minio/minio/cmd.ShortCommitID=" + commitID()[:12]
+	ldflagsStr += " -X github.com/minio/minio/cmd.GOPATH=" + os.Getenv("GOPATH")
+	ldflagsStr += " -X github.com/minio/minio/cmd.GOROOT=" + os.Getenv("GOROOT")
 	return ldflagsStr
 }
 
